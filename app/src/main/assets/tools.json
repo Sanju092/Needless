@@ -1,0 +1,598 @@
+[
+  {
+    "name": "toggle_flashlight",
+    "description": "Turn the phone camera flashlight (torch) on or off.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "type": "string",
+          "enum": [
+            "on",
+            "off"
+          ],
+          "description": "Desired torch state: 'on' or 'off'."
+        }
+      },
+      "required": [
+        "state"
+      ]
+    },
+    "triggers": [
+      "\\b(flashlight|torch|flash light)\\b.*\\b(on|off)\\b",
+      "\\b(turn|switch)\\b.*\\b(on|off)\\b.*\\b(flashlight|torch)\\b"
+    ]
+  },
+  {
+    "name": "get_battery_status",
+    "description": "Get the phone battery percentage, charging state, temperature, and health.",
+    "parameters": {
+      "type": "object",
+      "properties": {},
+      "required": []
+    },
+    "triggers": [
+      "\\b(battery|charge level|power level)\\b"
+    ]
+  },
+  {
+    "name": "set_screen_brightness",
+    "description": "Set the phone screen brightness percentage from 1 to 100, or set mode to auto.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "percent": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Brightness level 1-100."
+        },
+        "auto": {
+          "type": "boolean",
+          "default": false,
+          "description": "True to enable adaptive automatic brightness."
+        }
+      },
+      "required": [
+        "percent"
+      ]
+    },
+    "triggers": [
+      "\\b(dim|brighten|brightness)\\b.*\\b(\\d+)\\b"
+    ]
+  },
+  {
+    "name": "set_volume",
+    "description": "Set the audio volume level for a specific stream (media, ring, alarm, notification, call) from 0 to 100.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "stream": {
+          "type": "string",
+          "enum": [
+            "media",
+            "ring",
+            "alarm",
+            "notification",
+            "call"
+          ],
+          "default": "media"
+        },
+        "percent": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Volume percent 0-100."
+        }
+      },
+      "required": [
+        "percent"
+      ]
+    }
+  },
+  {
+    "name": "adjust_setting",
+    "description": "Nudge the volume or screen brightness up or down by a step percentage.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "setting": {
+          "type": "string",
+          "enum": [
+            "volume",
+            "brightness"
+          ]
+        },
+        "direction": {
+          "type": "string",
+          "enum": [
+            "up",
+            "down"
+          ]
+        },
+        "step": {
+          "type": "integer",
+          "default": 20,
+          "description": "Percentage points to adjust."
+        }
+      },
+      "required": [
+        "setting",
+        "direction"
+      ]
+    },
+    "triggers": [
+      "\\b(louder|quieter|brighter|darker|dimmer|softer)\\b"
+    ]
+  },
+  {
+    "name": "toggle_setting",
+    "description": "Turn a system setting on or off (wifi, bluetooth, do not disturb, auto rotate, dark mode, hotspot).",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "setting": {
+          "type": "string",
+          "enum": [
+            "wifi",
+            "bluetooth",
+            "do not disturb",
+            "auto rotate",
+            "dark mode",
+            "hotspot"
+          ]
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "on",
+            "off"
+          ]
+        }
+      },
+      "required": [
+        "setting",
+        "state"
+      ]
+    }
+  },
+  {
+    "name": "vibrate_phone",
+    "description": "Vibrate the phone haptic motor for a specified duration in milliseconds.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "duration_ms": {
+          "type": "integer",
+          "default": 500,
+          "minimum": 50,
+          "maximum": 5000
+        },
+        "pattern": {
+          "type": "string",
+          "enum": [
+            "single",
+            "double",
+            "sos",
+            "heartbeat"
+          ],
+          "default": "single"
+        }
+      },
+      "required": [
+        "duration_ms"
+      ]
+    }
+  },
+  {
+    "name": "read_hardware_sensors",
+    "description": "Read current values from phone hardware sensors (accelerometer, gyroscope, ambient light, barometer, proximity).",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "sensor": {
+          "type": "string",
+          "enum": [
+            "all",
+            "accelerometer",
+            "light",
+            "gyroscope",
+            "proximity",
+            "pressure"
+          ],
+          "default": "all"
+        }
+      },
+      "required": []
+    }
+  },
+  {
+    "name": "get_wifi_and_network_info",
+    "description": "Get connected Wi-Fi SSID, IP address, signal strength, cellular operator, and network type.",
+    "parameters": {
+      "type": "object",
+      "properties": {},
+      "required": []
+    }
+  },
+  {
+    "name": "get_gps_location",
+    "description": "Get the phone's current GPS coordinates (latitude, longitude, altitude, accuracy, and reverse-geocoded address).",
+    "parameters": {
+      "type": "object",
+      "properties": {},
+      "required": []
+    },
+    "triggers": [
+      "\\b(where am i|my location|gps coordinates|current location|find my phone)\\b"
+    ]
+  },
+  {
+    "name": "send_sms",
+    "description": "Send an SMS text message to a phone number or contact name.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "recipient": {
+          "type": "string",
+          "description": "Contact name or phone number, e.g. '+919876543210' or 'Sam'."
+        },
+        "message": {
+          "type": "string",
+          "description": "The text body to send."
+        }
+      },
+      "required": [
+        "recipient",
+        "message"
+      ]
+    }
+  },
+  {
+    "name": "read_recent_sms",
+    "description": "Read recent incoming SMS messages, optionally filtered by sender or category (all, otp, bank, personal).",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "type": "integer",
+          "default": 5,
+          "minimum": 1,
+          "maximum": 20
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "all",
+            "otp",
+            "bank",
+            "personal"
+          ],
+          "default": "all"
+        }
+      },
+      "required": []
+    }
+  },
+  {
+    "name": "extract_latest_otp",
+    "description": "Find the latest verification code / OTP from recent SMS or notifications and copy it to the clipboard.",
+    "parameters": {
+      "type": "object",
+      "properties": {},
+      "required": []
+    },
+    "triggers": [
+      "\\b(otp|verification code|2fa code|auth code)\\b"
+    ]
+  },
+  {
+    "name": "call_contact",
+    "description": "Initiate a phone call to a contact name or phone number.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "target": {
+          "type": "string",
+          "description": "Contact name or phone number to call, e.g. 'Mom' or '+15550199'."
+        },
+        "speakerphone": {
+          "type": "boolean",
+          "default": false,
+          "description": "True to enable speakerphone automatically."
+        }
+      },
+      "required": [
+        "target"
+      ]
+    }
+  },
+  {
+    "name": "search_contacts",
+    "description": "Search the phone's contact book by name, organization, or phone number.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Name or keyword to search in contacts."
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "speak_aloud",
+    "description": "Speak a message out loud through the phone speaker using on-device Text-to-Speech (TTS).",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "The phrase to speak aloud."
+        }
+      },
+      "required": [
+        "text"
+      ]
+    },
+    "triggers": [
+      "\\b(say out loud|speak aloud|read out loud|tts)\\b"
+    ]
+  },
+  {
+    "name": "control_media",
+    "description": "Control currently playing media or music (play, pause, resume, next, previous, stop).",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": [
+            "play",
+            "pause",
+            "resume",
+            "next",
+            "previous",
+            "stop"
+          ]
+        }
+      },
+      "required": [
+        "action"
+      ]
+    }
+  },
+  {
+    "name": "take_photo",
+    "description": "Capture a photo silently using the rear or front camera and send it back to Telegram.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "camera": {
+          "type": "string",
+          "enum": [
+            "rear",
+            "front"
+          ],
+          "default": "rear"
+        },
+        "flash": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": []
+    }
+  },
+  {
+    "name": "record_audio_clip",
+    "description": "Record an audio clip from the phone microphone for a given duration in seconds and send to Telegram.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "duration_sec": {
+          "type": "integer",
+          "default": 10,
+          "minimum": 3,
+          "maximum": 120
+        }
+      },
+      "required": [
+        "duration_sec"
+      ]
+    }
+  },
+  {
+    "name": "open_app",
+    "description": "Launch an installed application on the phone by its common name.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "app_name": {
+          "type": "string",
+          "description": "Application name such as WhatsApp, YouTube, Chrome, Maps, Spotify, Settings, Camera, Gmail, Telegram."
+        }
+      },
+      "required": [
+        "app_name"
+      ]
+    }
+  },
+  {
+    "name": "open_website",
+    "description": "Open a URL or website in the phone's default browser.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "description": "Web address such as github.com or https://cactuscompute.com/needle."
+        }
+      },
+      "required": [
+        "url"
+      ]
+    }
+  },
+  {
+    "name": "set_alarm_or_timer",
+    "description": "Set a system alarm for a specific time (e.g. '07:00') or start a countdown timer (e.g. '10 minutes').",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "alarm",
+            "timer"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "description": "Time like '07:30' for alarm, or duration like '10 minutes' for timer."
+        },
+        "label": {
+          "type": "string",
+          "default": "Needle Agent"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ]
+    }
+  },
+  {
+    "name": "take_screenshot",
+    "description": "Take a screenshot of the current phone screen via AccessibilityService and send it to Telegram.",
+    "parameters": {
+      "type": "object",
+      "properties": {},
+      "required": []
+    },
+    "triggers": [
+      "\\b(screenshot|screen capture|capture screen)\\b"
+    ]
+  },
+  {
+    "name": "ui_screen_action",
+    "description": "Perform an on-screen UI automation action via AccessibilityService: click text/button, type text, scroll, or press system keys (home, back, recents, lock).",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": [
+            "click_text",
+            "type_text",
+            "scroll_down",
+            "scroll_up",
+            "press_home",
+            "press_back",
+            "press_recents",
+            "lock_screen",
+            "open_notifications"
+          ]
+        },
+        "target_or_text": {
+          "type": "string",
+          "default": "",
+          "description": "Button label to click or text string to type."
+        }
+      },
+      "required": [
+        "action"
+      ]
+    }
+  },
+  {
+    "name": "clipboard_manager",
+    "description": "Read the current phone clipboard text or copy new text to the clipboard.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "operation": {
+          "type": "string",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "text": {
+          "type": "string",
+          "default": "",
+          "description": "Text to copy when operation is 'write'."
+        }
+      },
+      "required": [
+        "operation"
+      ]
+    }
+  },
+  {
+    "name": "extract_structured_data",
+    "description": "Use Needle 3 grammar-constrained extraction to parse unstructured text (receipts, invoices, contact cards, alerts) into structured fields.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "raw_text": {
+          "type": "string",
+          "description": "Unstructured text to parse."
+        },
+        "schema_type": {
+          "type": "string",
+          "enum": [
+            "contact",
+            "invoice",
+            "event",
+            "transaction"
+          ],
+          "default": "contact"
+        }
+      },
+      "required": [
+        "raw_text",
+        "schema_type"
+      ]
+    }
+  },
+  {
+    "name": "save_memory_note",
+    "description": "Embed and store a personal note, credential, or fact in the on-device SQLite vector knowledge vault using Needle 3 3072-dim embeddings.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "string",
+          "description": "The note or fact to remember locally."
+        },
+        "tag": {
+          "type": "string",
+          "default": "general"
+        }
+      },
+      "required": [
+        "content"
+      ]
+    }
+  },
+  {
+    "name": "search_memory_vault",
+    "description": "Semantically search the local on-device SQLite knowledge vault using Needle 3 embeddings (needle_embed).",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Semantic search query."
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  }
+]
